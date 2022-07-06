@@ -4,6 +4,7 @@ import { Server } from "socket.io"
 import mongoose from "mongoose"
 import cors from "cors"
 import listEndpoints from "express-list-endpoints"
+import roomsRouter from "./api/rooms/index.js"
 
 import connectionHandler from "./socket/index.js"
 
@@ -13,8 +14,10 @@ const port = process.env.PORT || 3001
 const httpServer = createServer(server)
 
 // **************************************** MIDDLEWARES **********************************
+server.use(express.json())
 
 // ****************************************** ENDPOINTS **********************************
+server.use("/rooms", roomsRouter)
 
 // *************************************** ERROR HANDLERS ********************************
 

@@ -8,8 +8,13 @@ const connectionHandler = socket => {
 
   socket.on("setUsername", payload => {
     // When a new client connects to the chat and sets a username, BE should keep track of that socketId & username
-    onlineUsers.push({ username: payload.username, socketId: socket.id })
+    onlineUsers.push({ username: payload.username, socketId: socket.id, room: payload.room })
     console.log("ONLINE USERS: ", onlineUsers)
+
+    // To join a specific room we can use socket.join
+    socket.join(payload.room)
+
+    console.log("ROOMS ", socket.rooms)
 
     // FE is waiting for an event called loggedin, we gonna emit that and send the list of online users
     socket.emit("loggedin", onlineUsers)
@@ -17,9 +22,12 @@ const connectionHandler = socket => {
     socket.broadcast.emit("newConnection", onlineUsers) // We want to emit this event to every connected socket but not the current one
   })
 
-  socket.on("sendmessage", message => {
+  socket.on("sendmessage", ({ message, room }) => {
     // we should broadcast that message to everybody but not to the sender of the message (otherwise he would see a duplicated message on the chat)
-    socket.broadcast.emit("message", message)
+    // socket.broadcast.emit("message", message)
+
+    // we would like to emit to everybody who is in the room
+    socket.to(room).emit("message", message)
   })
 
   socket.on("disconnect", () => {
