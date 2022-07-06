@@ -14,6 +14,7 @@ const port = process.env.PORT || 3001
 const httpServer = createServer(server)
 
 // **************************************** MIDDLEWARES **********************************
+server.use(cors())
 server.use(express.json())
 
 // ****************************************** ENDPOINTS **********************************

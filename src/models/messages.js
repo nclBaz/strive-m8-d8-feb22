@@ -12,4 +12,4 @@ const MessagesSchema = new Schema(
   { timestamps: true }
 )
 
-export default model("Room", MessagesSchema)
+export default model("Message", MessagesSchema)
